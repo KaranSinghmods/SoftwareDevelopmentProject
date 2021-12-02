@@ -1,6 +1,7 @@
 from user import *
 from item import *
 from shopping_cart import *
+from checkout import *
 import mysql.connector
 import sys
 
@@ -121,7 +122,37 @@ if __name__ == '__main__':
             my_cart.view_cart()
 
         elif test_input == "Checkout":
-            print("Checkout yet to be implemented")
+            checkout = Checkout(username)
+            if checkout.confirmorder():
+
+                my_item = Item(username)
+                my_item.edit_item_count()
+
+                connection, cursor = connect_database()
+
+                # checkout.add_to_order()
+
+                query = "DELETE FROM shopping_cart WHERE username=%s"
+                data = (username, )
+
+                cursor.execute(query, data)
+                connection.commit()
+
+                cursor.close()
+                connection.close()
+
+            else:
+                connection, cursor = connect_database()
+
+                query = "DELETE FROM shopping_cart WHERE username=%s"
+                data = (username, )
+
+                cursor.execute(query, data)
+                connection.commit()
+
+                cursor.close()
+                connection.close()
+
             # Confirm
 
         elif test_input == "Logout":
