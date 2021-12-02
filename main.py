@@ -1,4 +1,6 @@
 from user import *
+from item import *
+from shopping_cart import *
 import mysql.connector
 import sys
 
@@ -31,6 +33,7 @@ if __name__ == '__main__':
             my_account = User(username, password)
             if my_account.login():
                 break
+            print("Incorrect username/password\n")
 
     # Create a New Account
     elif response == "Create Account":
@@ -71,31 +74,121 @@ if __name__ == '__main__':
 
     # After-Login
     # my_account has the current user
-    print("\nLogging in...")
+    print("\nLogging in...\n")
 
-    print("Show a list of items available w/ current availability")
-    # available should only change when the item has been checked out,
-    # not when it has been added to the user's shopping cart
-    print("Example:")
-    print("\tItem: 1 \tCount: 13 \tPrice: $11.99")
-    print("\tItem: 2 \tCount: 9 \tPrice: $6.99")
-    print("\tItem: n \tCount: n \tPrice: $-.--")
+    while 1:
+        print("Commands: ")
 
-    print("Options:")
-    print("\tAdd item to Shopping Cart")
-    print("\tView Shopping Cart")
-    print("\tRemove item from Shopping Cart")
-    print("\tCheck-out Shopping Cart")
-    # Option to either use default shipping/billing or change in database
-    # Alters item count upon success
-    # Displays total cost
+        print("\tView Item Inventory")
+        print("\tDelete Account")
 
-    print("\tView Order History")
-    # Computes each order price w/ count to display total cost per order
+        print("\tAdd to Cart")
+        print("\tRemove from Cart")
+        print("\tView Cart")
 
-    print("\tView Items Available")
-    # Displays Item list again
+        print("\tCheckout")
+        print("\tLogout")
+        print()
 
-    print("\tLogout")
-    # Either exits the program or goes back into Before-Login Loop
-    # Exits for now
+        test_input = input("Enter a command: ")
+
+        if test_input == "View Item Inventory":
+            show = Item(username)
+            show.view_all()
+
+        elif test_input == "Delete Account":
+            my_account.delete_account()
+            print("Deleting Account")
+            break
+
+        elif test_input == "Add to Cart":
+            item_name = input("What item would you like to add: ")
+            # check if the item exists - item class
+            item_quantity = input("What quantity would you like: ")
+            # checks if the item quantity is available - item class
+
+            my_cart = Shopping_Cart(username)
+            my_cart.add_to_cart(item_name, item_quantity)
+
+        elif test_input == "Remove from Cart":
+            item_name = input("What item would you like to remove: ")
+
+            my_cart = Shopping_Cart(username)
+            my_cart.remove_from_cart(item_name)
+
+        elif test_input == "View Cart":
+            my_cart = Shopping_Cart(username)
+            my_cart.view_cart()
+
+        elif test_input == "Checkout":
+            print("Checkout yet to be implemented")
+            # Confirm
+
+        elif test_input == "Logout":
+            print("Logging out...")
+            break
+
+        '''
+        elif test_input == "edit inventory":
+            edit_count = Item(username)
+            edit_count.edit_item_count()
+        '''
+
+        '''  
+        print("Show a list of items available w/ current availability")
+        # available should only change when the item has been checked out,
+        # not when it has been added to the user's shopping cart
+        print("Example:")
+        print("\tItem: 1 \tCount: 13 \tPrice: $11.99")
+        print("\tItem: 2 \tCount: 9 \tPrice: $6.99")
+        print("\tItem: n \tCount: n \tPrice: $-.--")
+
+        print("Options:")
+        print("\tAdd item to Shopping Cart")
+        print("\tView Shopping Cart")
+        print("\tRemove item from Shopping Cart")
+        print("\tCheck-out Shopping Cart")
+        # Option to either use default shipping/billing or change in database
+        # Alters item count upon success
+        # Displays total cost
+
+        print("\tView Order History")
+        # Computes each order price w/ count to display total cost per order
+
+        print("\tView Items Available")
+        # Displays Item list again
+
+        print("\tLogout")
+        # Either exits the program or goes back into Before-Login Loop
+        # Exits for now
+        '''
+
+
+    '''
+    query = ("SELECT * FROM Shopping_Cart WHERE username=%s")
+    data = (self.username, )
+
+    cursor.execute(query, data)
+    result = cursor.fetchall()
+
+    total_value = 0
+
+    for x in result:
+        query2 = "SELECT item_price FROM Item WHERE item_id=%s"
+        data2 = x[0]
+        cursor.execute(query2, data2)
+        result2 = cursor.fetchall()
+
+        for x2 in result2:
+            item_count = x[2] # store item count
+            item_price = x2[2] # store item price
+
+            temp_value = item_count * item_price
+
+        total_value += temp_value
+
+    print("Your total is: ", total_value)
+
+    cursor.close()
+    connection.close()
+    '''
