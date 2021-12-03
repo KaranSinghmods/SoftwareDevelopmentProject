@@ -4,7 +4,6 @@ import sys
 from mysql_database import connect_database
 
 class User:
-    # def __init__(self):
 
     def __init__(self, username, password):
         self.username = username
@@ -47,7 +46,7 @@ class User:
 
     def delete_account(self):
         # Deletes the current account
-        print("Deleting", self.username)
+        print("Deleting..", self.username)
 
         connection, cursor = connect_database()
 
@@ -63,10 +62,13 @@ class User:
         cursor.execute(query, data)
         connection.commit()
 
+        query = "DELETE FROM Order_History WHERE username =%s"
+        data = (self.username, )
+
+        cursor.execute(query, data)
+        connection.commit()
+
         cursor.close()
         connection.close()
 
         print("Deleted.")
-
-
-

@@ -18,10 +18,6 @@ class Item:
 '''
 
 class Item:
-    # def __init__(self, item_name, item_price, item_quantity):
-        # self.item_name = item_name
-        # self.item_price = item_price
-        # self.item_quantity = item_quantity
 
     def __init__(self, username):
         self.username = username
@@ -31,27 +27,23 @@ class Item:
 
         cursor.execute("SELECT * FROM item")
         result = cursor.fetchall()
+
+        print("\nPrice:\tQuantity:\tBook Title:")
         for x in result:
-            print(x)
+            print(x[2], "\t", x[3], "\t\t", x[1])
+        print()
 
         cursor.close()
         connection.close()
 
     def edit_item_count(self):
-        print("Edit Item Count")
+        # print("Edit Item Count")
         connection, cursor = connect_database()
-
-        # query = "SELECT * FROM Shopping_Cart"
-
-        # FIXME - Hard-coded 'u1' username
-        # query = "SELECT * FROM Shopping_Cart WHERE username='u1'"
 
         query = "SELECT * FROM Shopping_Cart WHERE username=%s"
         data = (self.username, )
-        # print(self.username)
 
         cursor.execute(query, data)
-        # cursor.execute(query)
         result = cursor.fetchall()
 
         for x in result:
@@ -64,12 +56,19 @@ class Item:
         cursor.close()
         connection.close()
 
-        # query = "UPDATE Item SET item_quantity=%s WHERE item_id=&
+    def restock_item(self):
+        print("Secret Item Function")
+        connection, cursor = connect_database()
 
-        # query = "UPDATE Item.item_quantity SET item.item_quantity - Shopping_Cart.item_count " \
-        #         "WHERE Shopping_Cart.item_id = Item.item_id"
+        cursor.execute("SELECT * FROM Item")
+        result = cursor.fetchall()
 
-        # cursor.execute(query)
-        # cursor.execute("UPDATE Item.item_quantity ")
+        for x in result:
+            query = "UPDATE Item SET item_quantity=%s"
+            data = (100, )
+            cursor.execute(query, data)
+            connection.commit()
 
+        cursor.close()
+        connection.close()
 

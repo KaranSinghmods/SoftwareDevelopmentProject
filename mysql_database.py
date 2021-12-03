@@ -10,7 +10,7 @@ def connect_database():
             password="",
             database="swd_project"
         )
-        print("Successful connection.")
+        # print("Successful connection.")
     except:
         print("Failed connection.")
         sys.exit()

@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     # Login to your account
     if response == "Login":
-        print("Logging In...\n")
+        print("\nLogin.")
 
         while 1:
             username = input("Username: ")
@@ -34,11 +34,12 @@ if __name__ == '__main__':
             my_account = User(username, password)
             if my_account.login():
                 break
-            print("Incorrect username/password\n")
+            print("\nIncorrect username/password\n")
 
     # Create a New Account
     elif response == "Create Account":
-        print("Creating New Account...\n")
+        # print("Creating New Account...\n")
+        print("\nCreate Account.")
 
         while 1:
             username = input("Please choose a username: ")
@@ -68,6 +69,7 @@ if __name__ == '__main__':
 
         # FIXME - Deletes the account to prevent spam account (for testing)
         # my_account.delete_account()
+        print("Creating New Account...")
 
     elif response == "Exit":
         print("Exiting the e-commerce store...")
@@ -80,39 +82,39 @@ if __name__ == '__main__':
     while 1:
         print("Commands: ")
 
-        print("\tView Item Inventory")
-        print("\tDelete Account")
+        print("1. View Book Inventory")
+        print("2. Delete Account")
 
-        print("\tAdd to Cart")
-        print("\tRemove from Cart")
-        print("\tView Cart")
+        print("3. Add to Cart")
+        print("4. Remove from Cart")
+        print("5. View Cart")
 
-        print("\tCheckout")
-        print("\tLogout")
+        print("6. Checkout")
+        print("7. View Order History")
+        print("8. Logout")
         print()
 
         test_input = input("Enter a command: ")
 
-        if test_input == "View Item Inventory":
+        if test_input == "View Book Inventory":
             show = Item(username)
             show.view_all()
 
         elif test_input == "Delete Account":
             my_account.delete_account()
-            print("Deleting Account")
             break
 
         elif test_input == "Add to Cart":
-            item_name = input("What item would you like to add: ")
+            item_name = input("What book would you like to add: ")
             # check if the item exists - item class
-            item_quantity = input("What quantity would you like: ")
+            item_quantity = input("Quantity: ")
             # checks if the item quantity is available - item class
 
             my_cart = Shopping_Cart(username)
             my_cart.add_to_cart(item_name, item_quantity)
 
         elif test_input == "Remove from Cart":
-            item_name = input("What item would you like to remove: ")
+            item_name = input("What book would you like to remove: ")
 
             my_cart = Shopping_Cart(username)
             my_cart.remove_from_cart(item_name)
@@ -120,6 +122,7 @@ if __name__ == '__main__':
         elif test_input == "View Cart":
             my_cart = Shopping_Cart(username)
             my_cart.view_cart()
+            print()
 
         elif test_input == "Checkout":
             checkout = Checkout(username)
@@ -130,7 +133,7 @@ if __name__ == '__main__':
 
                 connection, cursor = connect_database()
 
-                # checkout.add_to_order()
+                checkout.add_to_order()
 
                 query = "DELETE FROM shopping_cart WHERE username=%s"
                 data = (username, )
@@ -153,11 +156,18 @@ if __name__ == '__main__':
                 cursor.close()
                 connection.close()
 
-            # Confirm
+        elif test_input == "View Order History":
+            my_checkout = Checkout(username)
+            my_checkout.view_order_history()
 
         elif test_input == "Logout":
-            print("Logging out...")
+            print("\nLogging out...")
             break
+
+        elif test_input == "Restock":
+            my_item = Item(username)
+            my_item.restock_item()
+            my_item.view_all()
 
         '''
         elif test_input == "edit inventory":
